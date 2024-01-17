@@ -27,7 +27,7 @@ body{
 }
 
 .btn-primary{
-    background: linear-gradient(20deg, #61075c, #110286) !important;
+    background: linear-gradient(120deg, #61075c, #110286) !important;
     border: 1px solid rgba(0, 0, 0, 0.075);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.075), 0 0 10px rgba(0, 0, 0, 0.075), 0 0 20px rgba(0, 0, 0, 0.075);
 }
