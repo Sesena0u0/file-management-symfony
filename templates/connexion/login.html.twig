@@ -1,0 +1,65 @@
+{% extends 'connexion/base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block form %}
+
+    <form action="{{ path('app_login') }}" method="post" >
+        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+            <p class="lead fw-normal mb-0 me-3 text-white">Sign in with</p>
+            <a class="btn btn-primary btn-floating mx-1" href="https:\\facebook.com" >
+                <i class="fab fa-facebook-f"></i>
+            </a>
+
+            <a class="btn btn-primary btn-floating mx-1" href="https:\\google.com" >
+                <i class="fab fa-google" ></i>
+            </a>
+        </div>
+
+        <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-3 mb-0 text-white">Or</p>
+        </div>
+
+        <!-- Email input -->
+        <div class="form-floating mb-4">
+            <input type="email" id="username" name="_username" class="form-control form-control-lg" placeholder="exemples@mail.com" />
+            <label class="form-label" for="email" id="username" value="{{ last_username }}" >Email address</label>
+        </div>
+
+        <!-- Password input -->
+        <div class="form-floating mb-3">
+            <input type="password" id="password" name="_password" class="form-control form-control-lg" placeholder="*******" />
+            <label class="form-label" for="mdp">Password</label>
+        </div>
+        
+        <!-- error -->
+        {% if error %}
+            <div class="mb-3 text-danger">
+                {{ error.messageKey |trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-between align-items-center">
+            <!-- Checkbox -->
+            <div class="form-check mb-0">
+                <input class="form-check-input me-2" type="checkbox" value="" id="souvinecheck" />
+                <label class="form-check-label text-white" for="souvinecheck">
+                    Remember me
+                </label>
+            </div>
+            <a href="#!" class="text-white">Forgot password?</a>
+        </div>
+
+        <div class="text-center text-lg-start mt-4 pt-2">
+            <button type="submite" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+            <p class="small fw-bold mt-2 pt-1 mb-0 text-white">Don't have an account? <a href="../signin" class="link-danger">Register</a></p>
+        </div>
+        
+        {% for message in app.flashes('success') %}
+            <div class="text-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </form>
+
+{% endblock %}

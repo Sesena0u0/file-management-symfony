@@ -1,0 +1,21 @@
+{% extends 'connexion/base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block form %}
+    {{ form_start(form) }}
+        <div class="form-floating mb-3">
+            {{ form_row(form.Name) }}
+        </div>
+        <div class="form-floating mb-3">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="form-floating mb-3">
+            {{ form_row(form.password) }}
+        </div>
+        <div class="text-center text-lg-start mt-4 pt-2">
+            {{ form_row(form.Signin) }}
+            <p class="small fw-bold mt-2 pt-1 mb-0 text-white">Have an account? <a href="../login" class="link-danger">Login</a></p>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -31,3 +31,7 @@ body{
     border: 1px solid rgba(0, 0, 0, 0.075);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.075), 0 0 10px rgba(0, 0, 0, 0.075), 0 0 20px rgba(0, 0, 0, 0.075);
 }
+
+.form-check-input:checked{
+    background-color: #61075c !important;
+}

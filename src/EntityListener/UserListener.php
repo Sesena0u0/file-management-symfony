@@ -20,10 +20,19 @@
         }
 
         function hash(User $user) {
-            if ($user->getPlainPassword() === null) {
+
+            //si c'est un signin
+            if ($user->getPlainPassword() == 'null') {
+                $user->setPassword(
+                    $this->hash->hashPassword(
+                        $user,
+                        $user->getPassword()
+                    )
+                );
                 return;
             }
 
+            //login hash
             $user->setPassword(
                 $this->hash->hashPassword(
                     $user,
