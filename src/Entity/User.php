@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,6 +47,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull()]
     private ?\DateTimeImmutable $createdAt;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Folder::class, orphanRemoval: true)]
+    private Collection $folder;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -64,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable;
+        $this->folder = new ArrayCollection();
     }
 
     /**
@@ -151,6 +157,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Folder>
+     */
+    public function getFolder(): Collection
+    {
+        return $this->folder;
+    }
+
+    public function addFolder(Folder $folder): static
+    {
+        if (!$this->folder->contains($folder)) {
+            $this->folder->add($folder);
+            $folder->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFolder(Folder $folder): static
+    {
+        if ($this->folder->removeElement($folder)) {
+            // set the owning side to null (unless already changed)
+            if ($folder->getUser() === $this) {
+                $folder->setUser(null);
+            }
+        }
 
         return $this;
     }

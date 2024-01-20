@@ -35,3 +35,13 @@ body{
 .form-check-input:checked{
     background-color: #61075c !important;
 }
+
+@media (min-width: 576px) {
+    .leftmenu{
+        margin-top: 3vh;
+        height: 94vh;
+        border-right: 2px solid;
+        border-image: linear-gradient(120deg, #8a1284, #1b0a98);
+        border-image-slice: 1;
+    }
+}
