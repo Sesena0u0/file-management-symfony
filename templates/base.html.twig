@@ -3,17 +3,18 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Symfony{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-        <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+            <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
         {% endblock %}
 
         {% block javascripts %}
-{% block importmap %}{{ importmap('app') }}{% endblock %}
-        <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <script src="{{ asset('js/jquery.js') }}"></script>
+            <script src="{{ asset('js/script.js') }}" defer ></script>
         {% endblock %}
     </head>
     <body>

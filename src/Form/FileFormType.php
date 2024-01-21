@@ -13,10 +13,19 @@ class FileFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('file', FileType::class)
+            ->add('file', FileType::class, [
+                "attr" => [
+                    'hidden'=> 'true',
+                    'class'=> 'import-file',
+                ],
+                'label_attr' => [
+                    'hidden' => 'true',
+                ],
+
+            ])
             ->add('Envoyer', SubmitType::class, [
                 "attr" => [
-                    'class'=> 'btn btn-primary btn-lg',
+                    'hidden'=> 'true',
                 ],
 
             ])

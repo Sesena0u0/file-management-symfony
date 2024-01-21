@@ -1,0 +1,39 @@
+{% extends 'home_user/index.html.twig' %}
+
+{% block nav_user %}
+
+    {% for message in app.flashes('success') %}
+        <div class="text-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="text-white">
+        <a class="nav-link"  href="{{  path('app_home_user')  }}">
+            :: {{ app.user.getName }}
+        </a>
+    </div>
+    {% for link in nav_folder %}
+        {% if link.getTxt() != "" %}
+            <div class="text-white">
+             > 
+            </div>
+            <div class="text-white">
+                <a class="nav-link"  href="{{  link.getId()  }}">{{  link.getTxt()  }}</a>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    {% for folders in folderChild %}
+        <div class="col-2 items-folder m-2 d-flex flex-column justify-content-end" ondblclick="$('.folder{{folders.getId}}').click()" >
+            <form hidden="" action="{{ path('folder_user', {id: folders.getId}) }}" method="get" >
+                <button type="submite" class="folder{{folders.getId}}" ></button>
+            </form>
+            <div class="name-folder text-white">
+                {{folders.getName}}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

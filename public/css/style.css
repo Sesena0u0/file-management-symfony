@@ -1,5 +1,7 @@
 body{
-    background: linear-gradient(80deg, #61075c, #110286);
+    background: linear-gradient(80deg, #230222 0%, #04011d 120%);
+    height: 100vh;
+    overflow-y: hidden;
 }
 
 .section-login{
@@ -27,21 +29,165 @@ body{
 }
 
 .btn-primary{
-    background: linear-gradient(120deg, #61075c, #110286) !important;
+    background: linear-gradient(120deg, #64015f, #0f0369) !important;
     border: 1px solid rgba(0, 0, 0, 0.075);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.075), 0 0 10px rgba(0, 0, 0, 0.075), 0 0 20px rgba(0, 0, 0, 0.075);
+    box-shadow: 0 0 5px #480144, 0 0 10px #0f0369, 0 0 20px 2px #090145;
+}
+
+.form-control{
+    background-color: rgba(50, 50, 50, 0.2);
+    border:1px solid #70056b;
+    color: rgb(73, 67, 93);
+}
+
+.form-control:hover{
+    background-color: rgba(50, 50, 50, 0.2);
+    border:1px solid #70056b;
+    color: rgb(73, 67, 93);
+}
+
+.form-control:focus{
+    background-color: rgba(50, 50, 50, 0.2);
+    border:1px solid #70056b;
+    color: rgb(73, 67, 93);
+}
+
+.form-floating > label {
+    background-color: transparent !important;
+}
+
+.form-floating > .form-control:focus ~ label::after,
+.form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+.form-floating > .form-control-plaintext ~ label::after,
+.form-floating > .form-select ~ label::after {
+    background-color: transparent !important;
+    color: rgb(73, 67, 93);
 }
 
 .form-check-input:checked{
     background-color: #61075c !important;
 }
 
+.leftmenu{
+    border: none;
+    border-image: linear-gradient(120deg, #8a1284, #1b0a98);
+    border-image-slice: 1;
+    border-bottom: 2px solid;
+    height: 60px;
+    
+}
+
 @media (min-width: 576px) {
     .leftmenu{
-        margin-top: 3vh;
-        height: 94vh;
-        border-right: 2px solid;
-        border-image: linear-gradient(120deg, #8a1284, #1b0a98);
+        border: none;
+        border-right: 4px solid;
+        border-image: linear-gradient( 360deg, #de30d5, #1b0a98);
         border-image-slice: 1;
+        height: 100vh;
+        box-shadow: 5px 0 5px rgba(15, 1, 66, 0.5) ;
+    }
+}
+.float-add{
+    position: absolute;
+    bottom: 10%;
+    right: 2%;
+    width: auto;
+}
+
+.floating-btn{
+    width: 50px;
+    height: 50px;
+    border: 1px solid #33027d;
+    border-radius: 50%;
+
+}
+
+.floating-btn i{
+    color: #8a1284;
+    font-size: xx-large;
+    cursor: pointer;
+}
+
+.drop-add{
+    width: 150px;
+}
+
+.btn-closed{
+    position: absolute; 
+    width: 20px; 
+    right: 0%;
+    color: rgb(177, 0, 162);
+    margin-top: 2px;
+}
+
+.drop-add div{
+    border: 1px solid #de30d5;
+    border-radius: 10px;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.form-folder{
+    position: absolute;
+    top: 10%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 300px;
+    height: 100px;
+    background: linear-gradient(80deg, #160315 0%, #040022 120%);
+    border-radius: 10px;
+    box-shadow: 0 0 5px #2a0128, 0 0 10px #0a0438, 0 0 20px 2px #04001c;
+}
+
+.users{
+    min-width: 35px;
+    min-height: 35px;
+    border: 2px solid #de30d5;
+    border-radius: 50%;
+}
+
+.user-name div {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.user-name{
+    overflow-x: hidden;
+}
+
+.bar-nav{
+    height: 26px;
+    border-bottom: 2px solid;
+    border-image: linear-gradient( 90deg, #de30d5, #1b0a98 160%);
+    border-image-slice: 1;
+}
+
+.items-folder{
+    /*border: 2px solid #de30d5;*/
+    height: 16.66666667vw;
+    background-image: url('../img/folder.png');
+    background-size: cover;
+    filter: drop-shadow(-5px 10px 5px rgba(15, 1, 66, 0.5));
+}
+
+@media (min-width: 576px) {
+    .items-folder{
+        height: 12vw;
+    }
+}
+
+.name-folder{
+    filter: drop-shadow(-5px 10px 10px rgba(15, 1, 66, 0.7));
+    user-select: none;
+}
+
+.list_fold{
+    overflow-y: auto;
+    height: 80vh;
+}
+
+@media (min-width: 576px) {
+    .list_fold{
+        height: 90vh;
     }
 }

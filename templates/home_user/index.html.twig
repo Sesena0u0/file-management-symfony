@@ -7,20 +7,93 @@
 {% block body %}
     <div class="container-fluid" >
         <div class="row" >
-            <div class="col-lg-3 col-md-3 col-sm-12 d-flex flex-row" >
+            <div class="col-lg-3 col-md-3 col-sm-3 col-12 d-flex flex-row" >
                 <div class="d-flex flex-column leftmenu w-100" >
-                    
+                    <div class="d-flex mt-3">
+                        <div class="users"></div>
+                        <div class="h-100 d-flex flex-column justify-content-center user-name">
+                            <div class="text-white fs-5 ms-1 " style="margin-top: -5px">
+                                {{ app.user.getName }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-9 col-md-9 col-sm-12 d-flex flex-row" >
-                <div>
-                    
+            <div class="col-lg-9 col-md-9 col-sm-9 col-12 d-flex flex-column" >
+
+                <div class="bar-nav mt-1 container-fluid d-flex flex-wrap">
+                    {% block nav_user %}
+                    {% endblock %}
+                </div>
+
+                <div class="section-user w-100">
+                    <div class="mt-3 container-fluid">
+                        <div class="row list_fold">
+                            {% block content %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="">
                     {{ form_start(form) }}
-                    {{ form_widget(form) }}
+                    {{ form_row(form.file) }}
                     {{ form_end(form) }}
-                    
                 </div>
             </div>
+
+            <div class="float-add">
+                <div class="drop-add">
+                    <div class="text-white m-3 new-folder btn-primary" onclick="$('.form-folder').fadeIn()" >
+                          <i class="fab fa-add" ></i> New Folder
+                    </div>
+                    <div class="text-white m-3 btn-primary" onclick="$('.import-file').click()">
+                          <i class="fab fa-add" ></i> Import File
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <div class="floating-btn btn-primary d-flex justify-content-center">
+                        <div class="d-flex flex-column justify-content-center">
+                            <i class="fab fa-add" ></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-folder">
+                <div class="btn-closed" onclick="$('.form-folder').fadeOut()" >
+                    <i class="fa fa-close" ></i>
+                </div>
+
+                {% if id_folder_now != 0 %}
+                    <form action="{{ path('folder_user', {id : id_folder_now } ) }}" method="post" >
+                {% else %}
+                    <form action="{{ path('app_home_user') }}" method="post" >
+                {% endif %}
+                
+                    <div class="">
+                        <label for="new_folder" class="text-white" >Folder name</label>
+                        <input type="text" class="form-control" name="_new_folder" id="new_folder" placeholder="New folder">
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-2">
+                        <button type="submit" class="btn btn-primary" onclick="window.location.href = '{{  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))  }}' "></button>
+                    </div>
+                </form>
+
+            </div>
+
         </div>
     </div>
+
+    <script defer >
+        reload();
+        function reload() {
+           $('.form-folder').hide();
+            $('.drop-add').hide();
+            $('.float-add').click(function () {$('.drop-add').slideDown();});
+            $('.float-add').mouseleave(function () {$('.drop-add').slideUp();});
+        }
+    </script>
+
 {% endblock %}

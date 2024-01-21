@@ -23,7 +23,7 @@ class File
     private ?string $ext = null;
 
     #[ORM\ManyToOne(inversedBy: 'file')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Folder $folder = null;
 
     public function getId(): ?int
