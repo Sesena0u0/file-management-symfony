@@ -197,10 +197,26 @@ class HomeUserController extends AbstractController
 
     #[Route('/delete_folder/{id}', name: 'delete_folder')]
     #[IsGranted('ROLE_USER')]
-    public function delete_folder(Folder $folder) {
+    public function delete_folder(Folder $folder, EntityManagerInterface $entityManager, Request $request, EntityManagerInterface $manage, SessionInterface $session) {
         if($this->getUser() != $folder->getUser()){
             throw $this->createAccessDeniedException();
         }
+
+        // stocke l'url dernier dans la session
+        $referer = $request->headers->get('referer');
+        $session->set('previous_url', $referer);
+
+        $entityManager->remove($folder);
+        $entityManager->flush();
+
+        // redirige vers url precedant
+        $previousUrl = $session->get('previous_url');
+
+        if (!$previousUrl) {
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->redirect($previousUrl);
     }
 
     #[Route('/delete_file/{id}', name: 'delete_file')]
@@ -217,17 +233,16 @@ class HomeUserController extends AbstractController
             dd("file missing");
         }
 
-        // Stocke l'URL précédente dans la session
+        // stocke l'url dernier dans la session
         $referer = $request->headers->get('referer');
         $session->set('previous_url', $referer);
 
         $entityManager->remove($file);
         $entityManager->flush();
 
-        // Redirige vers l'URL précédente
+        // redirige vers url precedant
         $previousUrl = $session->get('previous_url');
-        
-        // Si l'URL précédente n'est pas définie, redirige vers une route par défaut
+
         if (!$previousUrl) {
             return $this->redirectToRoute('home');
         }
