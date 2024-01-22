@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Folder;
+use App\Entity\File;
 use App\Form\FileFormType;
 use App\Repository\FolderRepository;
+use App\Repository\FileRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,7 +20,7 @@ class HomeUserController extends AbstractController
     
     #[Route('/home', name: 'app_home_user')]
     #[IsGranted('ROLE_USER')]
-    public function index(FolderRepository $fol, Request $request, EntityManagerInterface $manage) : Response
+    public function index(FolderRepository $fol, FileRepository $fil, Request $request, EntityManagerInterface $manage) : Response
     {
 
         //cree un nouveau dossier si il y aune requete de new folder
@@ -29,13 +31,20 @@ class HomeUserController extends AbstractController
             'folder_child' => null,
         ]);
 
+
         $this->nav_folder = null;
-        return $this->op_folder($folderChild, $request);
+
+        $fileChild = $fil->findBy([
+            'user'=>$this->getUser(),
+            'folder'=> $this->nav_folder,
+        ]);
+
+        return $this->op_folder($folderChild, $fileChild, $request, $manage);
     }
 
     #[Route('/folder/{id}', name: 'folder_user')]
     #[IsGranted('ROLE_USER')]
-    public function folder(Folder $folder, FolderRepository $fol, Request $request, EntityManagerInterface $manage) : Response {
+    public function folder(Folder $folder, FolderRepository $fol, FileRepository $fil, Request $request, EntityManagerInterface $manage) : Response {
         if($this->getUser() != $folder->getUser()){
             throw $this->createAccessDeniedException();
         }
@@ -44,12 +53,18 @@ class HomeUserController extends AbstractController
         $this->new_folder($folder, $request, $manage);
 
         $folderChild = $fol->findBy(['folder_child'=>$folder]);
-        
+
         $this->nav_folder = $folder;
-        return $this->op_folder($folderChild, $request);
+
+        $fileChild = $fil->findBy([
+            'user'=>$this->getUser(),
+            'folder'=> $this->nav_folder,
+        ]);
+        
+        return $this->op_folder($folderChild, $fileChild, $request, $manage);
     }
 
-    private function op_folder($folderChild, $request) : Response {
+    private function op_folder($folderChild, $fil, $request, EntityManagerInterface $manage) : Response {
         $form = $this->createForm(FileFormType::class);
         $form->handleRequest($request);
 
@@ -76,7 +91,30 @@ class HomeUserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('file')->getData();
      
-            $file->move('../Upload/', $file->getClientOriginalName());
+            $storage = '../Upload/';
+            $array_file = explode(".", $file->getClientOriginalName());
+            $file->move($storage, $file->getClientOriginalName());
+
+            $file_ext = $array_file[count($array_file)-1];
+            $file_name = "";
+
+            for($i = 0; $i < count($array_file)-1; $i++){
+                $file_name .= $array_file[$i];
+            }
+
+            $link_file = $storage.$file_name.'.'.$file_ext;
+            $file_ = new File();
+
+            $file_->setLink($link_file);
+            $file_->setFolder($this->nav_folder);
+            $file_->setSize(0);
+            $file_->setExt($file_ext);
+            $file_->setName($file_name);
+            $file_->setUser($this->getUser());
+
+            $manage->persist($file_);
+            $manage->flush();
+
         }
         
         //transformer les dossier parcouru en objet
@@ -91,6 +129,7 @@ class HomeUserController extends AbstractController
 
         return $this->render('home_user/folder/folder_section.html.twig', [
             'folderChild' => $folderChild,
+            'files'=> $fil,
             'form' => $form->createView(),
             'nav_folder' => $nav,
             'id_folder_now' => ($this->nav_folder != null)? $this->nav_folder->getId() : 0,
@@ -117,6 +156,22 @@ class HomeUserController extends AbstractController
         }
     }
 
+    #[Route('/read/{id}', name: 'read_file_user')]
+    #[IsGranted('ROLE_USER')]
+    public function readfile(File $file) {
+
+        if($file->getExt() == "jpg"){
+            header('Content-Type: image/jpg');
+        }else if($file->getExt() == "png"){
+            header('Content-Type: image/png');
+        }elseif($file->getExt() == "txt"){
+            header('Content-Type: text/txt');
+        }
+
+        readfile($file->getLink());
+        exit;
+
+    }
 
     // suppression de fichier
     private function supprimerFichier($lienFichier): void

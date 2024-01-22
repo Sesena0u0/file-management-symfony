@@ -17,6 +17,7 @@ class FileFormType extends AbstractType
                 "attr" => [
                     'hidden'=> 'true',
                     'class'=> 'import-file',
+                    'onchange'=> "$('.send-file').click();",
                 ],
                 'label_attr' => [
                     'hidden' => 'true',
@@ -26,6 +27,7 @@ class FileFormType extends AbstractType
             ->add('Envoyer', SubmitType::class, [
                 "attr" => [
                     'hidden'=> 'true',
+                    'class'=> 'send-file',
                 ],
 
             ])

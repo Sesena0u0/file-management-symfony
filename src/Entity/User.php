@@ -50,6 +50,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Folder::class, orphanRemoval: true)]
     private Collection $folder;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: File::class, orphanRemoval: true)]
+    private Collection $file;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable;
         $this->folder = new ArrayCollection();
+        $this->file = new ArrayCollection();
     }
 
     /**
@@ -185,6 +189,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($folder->getUser() === $this) {
                 $folder->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, File>
+     */
+    public function getFile(): Collection
+    {
+        return $this->file;
+    }
+
+    public function addFile(File $file): static
+    {
+        if (!$this->file->contains($file)) {
+            $this->file->add($file);
+            $file->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): static
+    {
+        if ($this->file->removeElement($file)) {
+            // set the owning side to null (unless already changed)
+            if ($file->getUser() === $this) {
+                $file->setUser(null);
             }
         }
 

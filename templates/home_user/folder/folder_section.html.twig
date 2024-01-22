@@ -27,7 +27,7 @@
 
 {% block content %}
     {% for folders in folderChild %}
-        <div class="col-2 items-folder m-2 d-flex flex-column justify-content-end" ondblclick="$('.folder{{folders.getId}}').click()" >
+        <div class="col-2 items-folder items__ m-2 d-flex flex-column justify-content-end" ondblclick="$('.folder{{folders.getId}}').click()" >
             <form hidden="" action="{{ path('folder_user', {id: folders.getId}) }}" method="get" >
                 <button type="submite" class="folder{{folders.getId}}" ></button>
             </form>
@@ -36,4 +36,13 @@
             </div>
         </div>
     {% endfor %}
+    
+    {% for file in files %}
+        <div class="col-2 items-file items__ m-2 d-flex flex-column justify-content-end" ondblclick="window.location.href = '{{ path('read_file_user', {id: file.getId}) }}' " >
+            <div class="name-folder text-white">
+                {{file.getName}}
+            </div>
+        </div>
+    {% endfor %}
+
 {% endblock %}

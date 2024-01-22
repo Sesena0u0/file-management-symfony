@@ -162,16 +162,23 @@ body{
     border-image-slice: 1;
 }
 
-.items-folder{
+.items__{
     /*border: 2px solid #de30d5;*/
     height: 16.66666667vw;
-    background-image: url('../img/folder.png');
     background-size: cover;
     filter: drop-shadow(-5px 10px 5px rgba(15, 1, 66, 0.5));
 }
 
+.items-folder{
+    background-image: url('../img/folder.png');
+}
+
+.items-file{
+    background-image: url('../img/file.png');
+}
+
 @media (min-width: 576px) {
-    .items-folder{
+    .items__{
         height: 12vw;
     }
 }
