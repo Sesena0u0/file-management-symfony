@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class HomeUserController extends AbstractController
 {
@@ -132,6 +133,7 @@ class HomeUserController extends AbstractController
             'files'=> $fil,
             'form' => $form->createView(),
             'nav_folder' => $nav,
+            'folder_now' => $this->nav_folder,
             'id_folder_now' => ($this->nav_folder != null)? $this->nav_folder->getId() : 0,
         ]);
     }
@@ -160,6 +162,10 @@ class HomeUserController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function readfile(File $file) {
 
+        if($this->getUser() != $file->getUser()){
+            throw $this->createAccessDeniedException();
+        }
+
         if($file->getExt() == "jpg"){
             header('Content-Type: image/jpg');
         }else if($file->getExt() == "png"){
@@ -170,6 +176,63 @@ class HomeUserController extends AbstractController
 
         readfile($file->getLink());
         exit;
+
+    }
+
+    #[Route('/edit_folder/{id}', name: 'edit_folder')]
+    #[IsGranted('ROLE_USER')]
+    public function edit_folder(Folder $folder) {
+        if($this->getUser() != $folder->getUser()){
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    #[Route('/edit_file/{id}', name: 'edit_file')]
+    #[IsGranted('ROLE_USER')]
+    public function edit_file(File $file) {
+        if($this->getUser() != $file->getUser()){
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    #[Route('/delete_folder/{id}', name: 'delete_folder')]
+    #[IsGranted('ROLE_USER')]
+    public function delete_folder(Folder $folder) {
+        if($this->getUser() != $folder->getUser()){
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    #[Route('/delete_file/{id}', name: 'delete_file')]
+    #[IsGranted('ROLE_USER')]
+    public function delete_file(File $file, EntityManagerInterface $entityManager, FolderRepository $fol, FileRepository $fil, Request $request, EntityManagerInterface $manage, SessionInterface $session) : Response {
+        if($this->getUser() != $file->getUser()){
+            throw $this->createAccessDeniedException();
+        }
+        try {
+            if (file_exists($file->getLink())) {
+                unlink($file->getLink());
+            }
+        } catch (\Exception $e) {
+            dd("file missing");
+        }
+
+        // Stocke l'URL précédente dans la session
+        $referer = $request->headers->get('referer');
+        $session->set('previous_url', $referer);
+
+        $entityManager->remove($file);
+        $entityManager->flush();
+
+        // Redirige vers l'URL précédente
+        $previousUrl = $session->get('previous_url');
+        
+        // Si l'URL précédente n'est pas définie, redirige vers une route par défaut
+        if (!$previousUrl) {
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->redirect($previousUrl);
 
     }
 
