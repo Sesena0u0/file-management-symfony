@@ -1,7 +1,6 @@
 body{
     background: linear-gradient(80deg, #230222 0%, #04011d 120%);
-    height: 100vh;
-    overflow-y: hidden;
+    
 }
 
 .section-login{
@@ -68,23 +67,30 @@ body{
     background-color: #61075c !important;
 }
 
-.leftmenu{
+.cleftmenu{
     border: none;
     border-image: linear-gradient(120deg, #8a1284, #1b0a98);
     border-image-slice: 1;
     border-bottom: 2px solid;
+    background: linear-gradient(80deg, #160315 0%, #040022 120%);
+    box-shadow: 0 0 5px #2a0128, 0 0 10px #0a0438, 0 0 20px 2px #04001c;
+}
+
+.leftmenu{
     height: 60px;
-    
 }
 
 @media (min-width: 576px) {
     .leftmenu{
+        height: 100vh;
+    }
+
+    .cleftmenu{
+        box-shadow: 5px 0 5px rgba(15, 1, 66, 0.5) ;
         border: none;
         border-right: 4px solid;
         border-image: linear-gradient( 360deg, #de30d5, #1b0a98);
         border-image-slice: 1;
-        height: 100vh;
-        box-shadow: 5px 0 5px rgba(15, 1, 66, 0.5) ;
     }
 }
 .float-add{

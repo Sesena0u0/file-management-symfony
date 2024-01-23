@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class HomeUserController extends AbstractController
 {
     private $nav_folder;
+    private $folderChild;
+    private $fileChild;
     
     #[Route('/home', name: 'app_home_user')]
     #[IsGranted('ROLE_USER')]
@@ -40,7 +42,7 @@ class HomeUserController extends AbstractController
             'folder'=> $this->nav_folder,
         ]);
 
-        return $this->op_folder($folderChild, $fileChild, $request, $manage);
+        return $this->op_folder($folderChild, $fileChild, $this->nav_folder, $request, $manage);
     }
 
     #[Route('/folder/{id}', name: 'folder_user')]
@@ -62,12 +64,15 @@ class HomeUserController extends AbstractController
             'folder'=> $this->nav_folder,
         ]);
         
-        return $this->op_folder($folderChild, $fileChild, $request, $manage);
+        return $this->op_folder($folderChild, $fileChild, $this->nav_folder, $request, $manage);
     }
 
-    private function op_folder($folderChild, $fil, $request, EntityManagerInterface $manage) : Response {
+    private function op_folder($folderChild, $fil, $file_selected, $request, EntityManagerInterface $manage) : Response {
         $form = $this->createForm(FileFormType::class);
         $form->handleRequest($request);
+
+        $this->folderChild = $folderChild;
+        $this->fileChild = $fil;
 
         //nom et id des dossier parcouru
         $nav_folder[0] = "";
@@ -170,8 +175,10 @@ class HomeUserController extends AbstractController
             header('Content-Type: image/jpg');
         }else if($file->getExt() == "png"){
             header('Content-Type: image/png');
-        }elseif($file->getExt() == "txt"){
+        }else if($file->getExt() == "txt"){
             header('Content-Type: text/txt');
+        }else if($file->getExt() == "gif"){
+            header('Content-Type: image/gif');
         }
 
         readfile($file->getLink());
@@ -181,18 +188,24 @@ class HomeUserController extends AbstractController
 
     #[Route('/edit_folder/{id}', name: 'edit_folder')]
     #[IsGranted('ROLE_USER')]
-    public function edit_folder(Folder $folder) {
+    public function edit_folder(Folder $folder, Request $request, EntityManagerInterface $manage) {
         if($this->getUser() != $folder->getUser()){
             throw $this->createAccessDeniedException();
         }
+
+        return $this->op_folder($this->folderChild, $this->fileChild, $this->nav_folder, $request, $manage);
+
     }
 
     #[Route('/edit_file/{id}', name: 'edit_file')]
     #[IsGranted('ROLE_USER')]
-    public function edit_file(File $file) {
+    public function edit_file(File $file, Request $request, EntityManagerInterface $manage) {
         if($this->getUser() != $file->getUser()){
             throw $this->createAccessDeniedException();
         }
+
+        return $this->op_folder($this->folderChild, $this->fileChild, $this->nav_folder, $request, $manage);
+
     }
 
     #[Route('/delete_folder/{id}', name: 'delete_folder')]
