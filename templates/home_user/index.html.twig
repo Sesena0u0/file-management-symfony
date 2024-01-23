@@ -8,13 +8,13 @@
     <div class="container-fluid" >
         <div class="row" >
             <div class="col-lg-3 col-md-3 col-sm-3 col-12 d-flex flex-row cleftmenu" >
-                <div class="d-flex flex-column leftmenu w-100" >
+                <div class="d-flex flex-column leftmenu w-100 mb-lg-0 mb-md-0 mb-sm-0 mb-3" >
                     <div class="d-flex mt-3">
-                        <div class="users"></div>
+                        <a class="users c-pointer" href="{{ path('app_user') }}"></a>
                         <div class="h-100 d-flex flex-column justify-content-center user-name">
-                            <div class="text-white fs-5 ms-1 " style="margin-top: -5px">
+                            <a class="text-white fs-5 ms-1 c-pointer nav-link" href="{{ path('app_user') }}" style="margin-top: -5px">
                                 {{ app.user.getName }}
-                            </div>
+                            </a>
                         </div>
                     </div>
                     {% block info_file %}

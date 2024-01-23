@@ -38,10 +38,10 @@
         </form>
         <div class="col-2 items-folder items__ m-2 d-flex flex-column justify-content-between" ondblclick="$('.folder{{folders.getId}}').click()" >
             <div class="action__ d-flex justify-content-end">
-                <div class="fa fa-edit text-success mx-2 c-pointer" onclick="edit__( {{folders.getId}}, '{{folders.getName}}', '{{ path('edit_file', {id: folders.getId}) }}' )" ></div>
+                <div class="fa fa-edit text-success mx-2 c-pointer" onclick="edit__( {{folders.getId}}, '{{folders.getName}}', '{{ path('edit_folder', {id: folders.getId}) }}' )" ></div>
                 <a class="fa fa-trash text-danger mx-2 c-pointer" href=" {{ path('delete_folder', {id: folders.getId}) }} " ></a>
             </div>
-            <div class="name-folder text-white">
+            <div class="name_items text-white title_items">
                 {{folders.getName}}
             </div>
         </div>
@@ -53,7 +53,7 @@
                 <div class="fa fa-edit text-success mx-2 c-pointer" onclick="edit__( {{file.getId}}, '{{file.getName}}', '{{ path('edit_file', {id: file.getId}) }}' )" ></div>
                 <a class="fa fa-trash text-danger mx-2 c-pointer" href=" {{ path('delete_file', {id: file.getId}) }} " ></a>
             </div>
-            <div class="name-folder text-white">
+            <div class="name_items text-white title_items" >
                 {{file.getName}}
             </div>
         </div>

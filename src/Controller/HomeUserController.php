@@ -23,7 +23,7 @@ class HomeUserController extends AbstractController
     
     #[Route('/home', name: 'app_home_user')]
     #[IsGranted('ROLE_USER')]
-    public function index(FolderRepository $fol, FileRepository $fil, Request $request, EntityManagerInterface $manage) : Response
+    public function index(FolderRepository $fol, FileRepository $fil, Request $request, EntityManagerInterface $manage, SessionInterface $session) : Response
     {
 
         //cree un nouveau dossier si il y aune requete de new folder
@@ -42,12 +42,15 @@ class HomeUserController extends AbstractController
             'folder'=> $this->nav_folder,
         ]);
 
+        $referer = $request->headers->get('referer');
+        $session->set('previous_url', $referer);
+
         return $this->op_folder($folderChild, $fileChild, $this->nav_folder, $request, $manage);
     }
 
     #[Route('/folder/{id}', name: 'folder_user')]
     #[IsGranted('ROLE_USER')]
-    public function folder(Folder $folder, FolderRepository $fol, FileRepository $fil, Request $request, EntityManagerInterface $manage) : Response {
+    public function folder(Folder $folder, FolderRepository $fol, FileRepository $fil, Request $request, EntityManagerInterface $manage, SessionInterface $session) : Response {
         if($this->getUser() != $folder->getUser()){
             throw $this->createAccessDeniedException();
         }
@@ -63,6 +66,9 @@ class HomeUserController extends AbstractController
             'user'=>$this->getUser(),
             'folder'=> $this->nav_folder,
         ]);
+
+        $referer = $request->headers->get('referer');
+        $session->set('previous_url', $referer);
         
         return $this->op_folder($folderChild, $fileChild, $this->nav_folder, $request, $manage);
     }
@@ -188,23 +194,59 @@ class HomeUserController extends AbstractController
 
     #[Route('/edit_folder/{id}', name: 'edit_folder')]
     #[IsGranted('ROLE_USER')]
-    public function edit_folder(Folder $folder, Request $request, EntityManagerInterface $manage) {
+    public function edit_folder(Folder $folder, Request $request, EntityManagerInterface $manage, SessionInterface $session) {
         if($this->getUser() != $folder->getUser()){
             throw $this->createAccessDeniedException();
         }
 
-        return $this->op_folder($this->folderChild, $this->fileChild, $this->nav_folder, $request, $manage);
+        $referer = $request->headers->get('referer');
+        $session->set('previous_url', $referer);
+
+        $previousUrl = $session->get('previous_url');
+
+        if (!$previousUrl) {
+            return $this->redirectToRoute('app_home_user');
+        }
+
+        $folder_name = $request->request->get('name');
+        if($folder_name == null){
+            return $this->redirect($previousUrl);
+        }
+
+        $folder->setName($folder_name);
+
+        $manage->persist($folder);
+        $manage->flush();
+       
+        return $this->redirect($previousUrl);
 
     }
 
     #[Route('/edit_file/{id}', name: 'edit_file')]
     #[IsGranted('ROLE_USER')]
-    public function edit_file(File $file, Request $request, EntityManagerInterface $manage) {
+    public function edit_file(File $file, Request $request, EntityManagerInterface $manage, SessionInterface $session) {
         if($this->getUser() != $file->getUser()){
             throw $this->createAccessDeniedException();
         }
 
-        return $this->op_folder($this->folderChild, $this->fileChild, $this->nav_folder, $request, $manage);
+        $referer = $request->headers->get('referer');
+        $session->set('previous_url', $referer);
+
+        $previousUrl = $session->get('previous_url');
+
+        if (!$previousUrl) {
+            return $this->redirectToRoute('app_home_user');
+        }
+
+        $file_name = $request->request->get('_name');
+        if($file_name == null){
+            return $this->redirect($previousUrl);
+        }
+
+        $manage->persist($file);
+        $manage->flush();
+        
+        return $this->redirect($previousUrl);
 
     }
 
@@ -226,7 +268,7 @@ class HomeUserController extends AbstractController
         $previousUrl = $session->get('previous_url');
 
         if (!$previousUrl) {
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_user');
         }
 
         return $this->redirect($previousUrl);
@@ -238,6 +280,7 @@ class HomeUserController extends AbstractController
         if($this->getUser() != $file->getUser()){
             throw $this->createAccessDeniedException();
         }
+
         try {
             if (file_exists($file->getLink())) {
                 unlink($file->getLink());
@@ -257,7 +300,7 @@ class HomeUserController extends AbstractController
         $previousUrl = $session->get('previous_url');
 
         if (!$previousUrl) {
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_user');
         }
 
         return $this->redirect($previousUrl);
