@@ -50,26 +50,16 @@ class UserInfoController extends AbstractController
         if($name == null || $email == null ){
             return $this->redirect($previousUrl);
         }
+
+        if (!$hash->isPasswordValid($user_now, $lastPassword)) {
+            return $this->redirect($previousUrl);
+        }
         
         if($password != null){
+            //$user_now->setPassword($password);
+            //$hashedPassword = $hash->hashPassword($user_now, $password);
             $user_now->setPassword($password);
         }
-
-        /*$user_tmp = new User();
-        $user_tmp->setName($user_now->getName());
-        $user_tmp->setEmail($user_now->getEmail());
-        $user_tmp->setRoles($user_now->getRoles());
-        $user_tmp->setCreatedAt($user_now->getCreatedAt());
-
-        $hashpassword = $hash->hashPassword(
-            $user_tmp,
-            $lastPassword
-        );
-
-        if($hashpassword == $user_now->getPassword()){
-            dd($user_now);
-        }
-        dd($hashpassword);*/
 
         $manage->persist($user_now);
         $manage->flush();

@@ -13,6 +13,12 @@ use App\Form\SigninFormType;
 
 class connexionController extends AbstractController
 {
+
+    #[Route('/', name: 'app')]
+    public function index(AuthenticationUtils $auth): Response{
+        return $this->redirectToRoute('app_login');
+    }
+
     #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $auth): Response
     {

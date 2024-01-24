@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="d-flex flex-column">
-                <div class="d-flex m-2 list_info">
+                <div class="d-flex m-2 list_info c-pointer">
                     <div class="d-flex flex-column justify-content-center w-100">
                         <div class="d-flex justify-content-between w-100 " onclick="showInfoperso__( `{{ path('user_edit') }}`, '{{app.user.getName}}', '{{app.user.getEmail}}' )">
                             <div class="text-white mx-1">Personal Information</div>
@@ -23,9 +23,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex m-2 list_info">
-                
-                </div>
+                <a class="d-flex m-2 list_info nav-link" href="{{ path('app_logout') }}">
+                    <div class="d-flex flex-column justify-content-center w-100">
+                        <div class="d-flex justify-content-between w-100 " >
+                            <div class="text-white mx-1">Logout</div>
+                            <i class="fa fa-logout text-white me-3 mt-1" ></i>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
         <div class="col-lg-8 col-md-8 col-sm-8 col-12">
