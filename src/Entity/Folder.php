@@ -167,4 +167,14 @@ class Folder
 
         return $this;
     }
+
+    private $enfant;
+    public function setEnfant($enfant) {
+        $this->enfant = $enfant;
+    }
+
+    public function getEnfant() {
+        return $this->enfant;
+    }
+
 }

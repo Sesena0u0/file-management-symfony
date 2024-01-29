@@ -20,6 +20,9 @@ class HomeUserController extends AbstractController
     private $nav_folder;
     private $folderChild;
     private $fileChild;
+    private $manage;
+    private $request;
+    private $all_folder;
     
     #[Route('/home', name: 'app_home_user')]
     #[IsGranted('ROLE_USER')]
@@ -28,6 +31,9 @@ class HomeUserController extends AbstractController
 
         //cree un nouveau dossier si il y aune requete de new folder
         $this->new_folder(null, $request, $manage);
+
+        //
+        $this->all_folder($fol);
 
         $folderChild = $fol->findBy([
             'user'=>$this->getUser(),
@@ -45,7 +51,10 @@ class HomeUserController extends AbstractController
         $referer = $request->headers->get('referer');
         $session->set('previous_url', $referer);
 
-        return $this->op_folder($folderChild, $fileChild, $this->nav_folder, $request, $manage);
+        $this->request = $request;
+        $this->manage = $manage;
+
+        return $this->op_folder($folderChild, $fileChild, $this->nav_folder);
     }
 
     #[Route('/folder/{id}', name: 'folder_user')]
@@ -58,6 +67,8 @@ class HomeUserController extends AbstractController
         //cree un nouveau dossier si il y aune requete de new folder
         $this->new_folder($folder, $request, $manage);
 
+        $this->all_folder($fol);
+
         $folderChild = $fol->findBy(['folder_child'=>$folder]);
 
         $this->nav_folder = $folder;
@@ -69,13 +80,16 @@ class HomeUserController extends AbstractController
 
         $referer = $request->headers->get('referer');
         $session->set('previous_url', $referer);
+
+        $this->request = $request;
+        $this->manage = $manage;
         
-        return $this->op_folder($folderChild, $fileChild, $this->nav_folder, $request, $manage);
+        return $this->op_folder($folderChild, $fileChild, $this->nav_folder);
     }
 
-    private function op_folder($folderChild, $fil, $file_selected, $request, EntityManagerInterface $manage) : Response {
+    private function op_folder($folderChild, $fil, $file_selected) : Response {
         $form = $this->createForm(FileFormType::class);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request);
 
         $this->folderChild = $folderChild;
         $this->fileChild = $fil;
@@ -124,8 +138,8 @@ class HomeUserController extends AbstractController
             $file_->setName($file_name);
             $file_->setUser($this->getUser());
 
-            $manage->persist($file_);
-            $manage->flush();
+            $this->manage->persist($file_);
+            $this->manage->flush();
 
         }
         
@@ -152,6 +166,7 @@ class HomeUserController extends AbstractController
             'last_nav_folder' => $last_nav,
             'folder_now' => $this->nav_folder,
             'id_folder_now' => ($this->nav_folder != null)? $this->nav_folder->getId() : 0,
+            'all_folder' => $this->all_folder,
         ]);
     }
 
@@ -314,15 +329,15 @@ class HomeUserController extends AbstractController
 
     }
 
-    // suppression de fichier
-    private function supprimerFichier($lienFichier): void
-    {
-        try {
-            if (file_exists($lienFichier)) {
-                unlink($lienFichier);
-            }
-        } catch (\Exception $e) {
-            
+    private function all_folder($fol){
+        $this->all_folder = $fol->findBy(['user'=>$this->getUser()]);
+        foreach ($this->all_folder as $folder) {
+            $enfant =  $fol->findBy([
+                'user'=>$this->getUser(),
+                'folder_child' => $folder,
+            ]);
+
+            $folder->setEnfant($enfant);
         }
     }
 

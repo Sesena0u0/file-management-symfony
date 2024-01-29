@@ -107,3 +107,8 @@ function show_option(type, id, name) {
 function _hidden(self) {
     $(self).slideUp();
 } 
+
+function switch_enfant(self, other) {
+    $(other).slideToggle();
+    
+}
