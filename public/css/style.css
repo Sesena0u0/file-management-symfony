@@ -107,7 +107,7 @@ body{
     box-shadow: 0 0 5px #2a0128, 0 0 10px #0a0438, 0 0 20px 2px #04001c;
     border: 2px solid #de30d5;
     border-radius: 50%;
-
+    filter: blur(0.7px);
 }
 
 .floating-btn i{
@@ -143,9 +143,14 @@ body{
     margin: auto;
     width: 300px;
     height: 100px;
-    background: linear-gradient(80deg, #160315 0%, #040022 120%);
-    border-radius: 10px;
-    box-shadow: 0 0 5px #2a0128, 0 0 10px #0a0438, 0 0 20px 2px #04001c;
+}
+
+.text-app{
+    color: #891083;
+}
+
+.-close{
+    filter: drop-shadow(0 0 2px #480144);
 }
 
 .users{
@@ -180,6 +185,7 @@ body{
 .items__:hover{
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
+    filter: blur(0.5px);
 }
 
 .items-folder{
@@ -225,7 +231,35 @@ body{
 }
 
 .action__{
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    width: 20px;
+    height: 15px;
+}
+
+.card-control{
+    width: 300px;
+    height: 300px;
+}
+
+.ctntcn{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
     
+}
+
+.cont-option{
+    width: 300px;
+    height: 300px;
+}
+
+.cont-rename{
+    width: 300px;
+    height: 150px;
 }
 
 .title_items {

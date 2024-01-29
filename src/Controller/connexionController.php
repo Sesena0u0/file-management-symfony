@@ -22,6 +22,10 @@ class connexionController extends AbstractController
     #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $auth): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_home_user');
+        }
+
         return $this->render('connexion/login.html.twig', [
             'controller_name' => 'LoginController',
             'last_username' => $auth->getLastUsername(),

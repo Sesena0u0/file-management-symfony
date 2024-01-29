@@ -139,11 +139,17 @@ class HomeUserController extends AbstractController
             array_push($nav, $n);
         }
 
+        $last_nav = $nav[0];
+        if(count($nav) > 2){
+            $last_nav =$nav[count($nav)-2];
+        }
+
         return $this->render('home_user/folder/folder_section.html.twig', [
             'folderChild' => $folderChild,
             'files'=> $fil,
             'form' => $form->createView(),
             'nav_folder' => $nav,
+            'last_nav_folder' => $last_nav,
             'folder_now' => $this->nav_folder,
             'id_folder_now' => ($this->nav_folder != null)? $this->nav_folder->getId() : 0,
         ]);
@@ -185,11 +191,12 @@ class HomeUserController extends AbstractController
             header('Content-Type: text/txt');
         }else if($file->getExt() == "gif"){
             header('Content-Type: image/gif');
+        }else if($file->getExt() == "pdf"){
+            header('Content-Type: txt/pdf');
         }
 
         readfile($file->getLink());
         exit;
-
     }
 
     #[Route('/edit_folder/{id}', name: 'edit_folder')]

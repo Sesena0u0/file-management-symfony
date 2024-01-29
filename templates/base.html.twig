@@ -9,11 +9,15 @@
             <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ asset('css/style.css') }}">
             <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/aos.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/cssanimation.min.css') }}">
         {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
             <script src="{{ asset('js/jquery.js') }}"></script>
+            <script src="{{ asset('js/TextPlugin.min.js') }}"></script>
+            <script src="{{ asset('js/aos.min.js') }}" defer ></script>
             <script src="{{ asset('js/script.js') }}" defer ></script>
         {% endblock %}
     </head>

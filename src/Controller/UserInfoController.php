@@ -52,18 +52,27 @@ class UserInfoController extends AbstractController
         }
 
         if (!$hash->isPasswordValid($user_now, $lastPassword)) {
+
+            $this->addFlash(
+                'no_match',
+                'Password is invalid'
+            );
+
             return $this->redirect($previousUrl);
         }
         
         if($password != null){
-            //$user_now->setPassword($password);
-            //$hashedPassword = $hash->hashPassword($user_now, $password);
             $user_now->setPassword($password);
         }
 
         $manage->persist($user_now);
         $manage->flush();
 
-        return $this->redirectToRoute('app_home_user');
+        $this->addFlash(
+            'match',
+            'Modification succefull'
+        );
+
+        return $this->redirect($previousUrl);
     }
 }

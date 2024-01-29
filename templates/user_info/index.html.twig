@@ -40,4 +40,16 @@
         </div>
     </div>
 </div>
+
+{% for message in app.flashes('no_match') %}
+    <div class="text-danger">
+        {{ message }}
+    </div>
+{% endfor %}
+{% for message in app.flashes('match') %}
+    <div class="text-success">
+        {{ message }}
+    </div>
+{% endfor %}
+
 {% endblock %}

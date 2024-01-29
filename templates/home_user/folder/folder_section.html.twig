@@ -24,8 +24,8 @@
             <div class="text-white">
              > 
             </div>
-            <div class="text-white">
-                <a class="nav-link"  href="{{  link.getId()  }}">{{  link.getTxt()  }}</a>
+            <div class="text-white {% if last_nav_folder.getId() == link.getId()  %}cssanimation fadeIn{% endif %} ">
+                <a class="nav-link" href="{{  link.getId()  }}">{{  link.getTxt()  }}</a>
             </div>
         {% endif %}
     {% endfor %}
@@ -36,10 +36,11 @@
         <form hidden="" action="{{ path('folder_user', {id: folders.getId}) }}" method="get" >
             <button type="submite" class="folder{{folders.getId}}" ></button>
         </form>
-        <div class="col-2 items-folder items__ m-2 d-flex flex-column justify-content-between" ondblclick="$('.folder{{folders.getId}}').click()" >
-            <div class="action__ d-flex justify-content-end">
-                <div class="fa fa-edit text-success mx-2 c-pointer" onclick="edit__( {{folders.getId}}, '{{folders.getName}}', '{{ path('edit_folder', {id: folders.getId}) }}' )" ></div>
-                <a class="fa fa-trash text-danger mx-2 c-pointer" href=" {{ path('delete_folder', {id: folders.getId}) }} " ></a>
+        <div class="col-2 items-folder items__ m-2 d-flex flex-column justify-content-between cssanimation fadeIn" ondblclick="$('.folder{{folders.getId}}').click()" >
+            <div class="d-flex justify-content-end">
+                <div class="action__ d-flex justify-content-center mt-2" onclick="show_option('folder', {{folders.getId}}, '{{folders.getName}}' )" >
+                    <i class="fa fa-ellipsis-h" style="color: rgba(255, 255, 255, 0.2)" ></i>
+                </div>
             </div>
             <div class="name_items text-white title_items">
                 {{folders.getName}}
@@ -48,15 +49,22 @@
     {% endfor %}
     
     {% for file in files %}
-        <div class="col-2 items-file items__ m-2 d-flex flex-column justify-content-between" ondblclick="window.location.href = '{{ path('read_file_user', {id: file.getId}) }}' " >
-            <div class="action__ d-flex justify-content-end">
-                <div class="fa fa-edit text-success mx-2 c-pointer" onclick="edit__( {{file.getId}}, '{{file.getName}}', '{{ path('edit_file', {id: file.getId}) }}' )" ></div>
-                <a class="fa fa-trash text-danger mx-2 c-pointer" href=" {{ path('delete_file', {id: file.getId}) }} " ></a>
+        <div class="col-2 items-file items__ m-2 d-flex flex-column justify-content-between cssanimation fadeIn" ondblclick="window.location.href = '{{ path('read_file_user', {id: file.getId}) }}' " >
+            <div class="d-flex justify-content-end">
+                <div class="action__ d-flex justify-content-end mt-2" onclick="show_option('file', {{file.getId}}, '{{file.getName}}' )" ></div>
             </div>
             <div class="name_items text-white title_items" >
                 {{file.getName}}
             </div>
         </div>
     {% endfor %}
+
+    <div class="cont-option ctntcn" onclick="_hidden(this)" ></div>
+    <div class="card cont-rename ctntcn" ></div>
+
+    <script>
+        $('.cont-option').hide();
+        $('.cont-rename').hide();
+    </script>
 
 {% endblock %}
