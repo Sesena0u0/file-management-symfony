@@ -191,6 +191,7 @@ class HomeUserController extends AbstractController
     }
 
     #[Route('/read/{id}', name: 'read_file_user')]
+    #[Route('/file/{id}', name: 'read_file_user_2')]
     #[IsGranted('ROLE_USER')]
     public function readfile(File $file) {
 

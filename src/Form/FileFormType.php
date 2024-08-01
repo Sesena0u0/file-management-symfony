@@ -28,6 +28,7 @@ class FileFormType extends AbstractType
                 "attr" => [
                     'hidden'=> 'true',
                     'class'=> 'send-file',
+                    'onclick'=>'window.location.href=""'
                 ],
 
             ])
