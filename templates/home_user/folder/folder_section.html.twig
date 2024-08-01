@@ -86,7 +86,7 @@
         </form>
         <div class="col-2 items-folder items__ m-2 d-flex flex-column justify-content-between cssanimation fadeIn" ondblclick="$('.folder{{folders.getId}}').click()" >
             <div class="d-flex justify-content-end">
-                <div class="action__ d-flex justify-content-center mt-2" onclick="show_option('folder', {{folders.getId}}, '{{folders.getName}}' )" >
+                <div class="action__ d-flex justify-content-center mt-2 c-pointer" onclick="show_option('folder', {{folders.getId}}, '{{folders.getName}}' )" >
                     <i class="fa fa-ellipsis-h" style="color: rgba(255, 255, 255, 0.2)" ></i>
                 </div>
             </div>
@@ -99,7 +99,9 @@
     {% for file in files %}
         <div class="col-2 items-file items__ m-2 d-flex flex-column justify-content-between cssanimation fadeIn" ondblclick="window.location.href = '{{ path('read_file_user', {id: file.getId}) }}' " >
             <div class="d-flex justify-content-end">
-                <div class="action__ d-flex justify-content-end mt-2" onclick="show_option('file', {{file.getId}}, '{{file.getName}}' )" ></div>
+                <div class="action__ d-flex justify-content-center mt-2 c-pointer" onclick="show_option('file', {{file.getId}}, '{{file.getName}}' )" >
+                    <i class="fa fa-ellipsis-h" style="color: rgba(255, 255, 255, 0.2)" ></i>
+                </div>
             </div>
             <div class="name_items text-white title_items" >
                 {{file.getName}}
